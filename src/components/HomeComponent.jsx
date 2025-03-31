@@ -45,8 +45,6 @@ export default function HomeComponent() {
 
     addLine('Got chainId: ' + parseInt(chainId, 16));
 
-    addLine('Generating typed data...');
-
     const typedData = {
       types: {
         EIP712Domain: [
@@ -55,14 +53,12 @@ export default function HomeComponent() {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' }
         ],
-        AuthorizationMessage: [ // Using a descriptive type name
-          { name: 'title', type: 'string' }, // Add user-friendly fields
-          { name: 'description', type: 'string' },
-          { name: 'userAddress', type: 'address' },
-          { name: 'nonce', type: 'uint256' }
+        Message: [
+          { name: 'content', type: 'string' },
+          { name: 'userAddress', type: 'address' }
         ]
       },
-      primaryType: 'AuthorizationMessage',
+      primaryType: 'Message',
       domain: {
         name: 'Anonymous Gripes',
         version: '1',
@@ -70,10 +66,8 @@ export default function HomeComponent() {
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
       message: {
-        title: 'Generate zero-knowledge proof',
-        description: message,
-        userAddress: walletAddress,
-        nonce: 1
+        message: message,
+        userAddress: walletAddress
       }
     };
 
