@@ -70,7 +70,7 @@ export default function HomeComponent() {
     try {
       const signature = await frame.sdk.wallet.ethProvider.request({
         method: 'eth_signTypedData_v4',
-        params: [walletAddress, JSON.stringify({ message: message })],
+        params: [JSON.stringify({ message: message })],
         from: walletAddress,
       })
 
