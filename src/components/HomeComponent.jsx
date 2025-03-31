@@ -19,7 +19,7 @@ export default function HomeComponent() {
   };
 
   const handleGenerate = async () => {
-    const message = 'By signing this message, you are creating a unique anonymous key for your account. This does not initiate a blockchain transaction or cost any gas fees.'
+    const message = 'By signing this message, you are creating a unique anonymous key for your account.'
 
     addLine('Attempting to switch to Base...');
 
@@ -66,7 +66,8 @@ export default function HomeComponent() {
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
       message: {
-        message: message,
+        // message: message,
+        content: message,
         userAddress: walletAddress
       }
     };
