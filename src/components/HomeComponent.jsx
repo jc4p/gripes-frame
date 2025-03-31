@@ -8,7 +8,13 @@ export default function HomeComponent() {
   const [lines, setLines] = useState([]);
 
   const handleGenerate = async () => {
-    const message = 'Generating zero-knowledge proof for Anonymous Gripes app'
+    const message = 'By signing this message, you are creating a unique anonymous key for your account. This does not initiate a blockchain transaction or cost any gas fees.'
+
+    // switch to Base if we're not already on it
+    await frame.sdk.wallet.ethProvider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x2105' }] // Base mainnet chainId
+    });
 
     const accounts = await frame.sdk.wallet.ethProvider.request({
       method: 'eth_requestAccounts'
@@ -26,13 +32,14 @@ export default function HomeComponent() {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' }
         ],
-        DeterministicKey: [
+        AuthorizationMessage: [ // Using a descriptive type name
+          { name: 'title', type: 'string' }, // Add user-friendly fields
+          { name: 'description', type: 'string' },
           { name: 'userAddress', type: 'address' },
-          { name: 'appId', type: 'string' },
           { name: 'nonce', type: 'uint256' }
         ]
       },
-      primaryType: 'DeterministicKey',
+      primaryType: 'AuthorizationMessage',
       domain: {
         name: 'Anonymous Gripes',
         version: '1',
@@ -40,8 +47,9 @@ export default function HomeComponent() {
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
       message: {
+        title: 'Generate zero-knowledge proof',
+        description: message,
         userAddress: userAddress,
-        appId: 'anonymous-gripes',
         nonce: 1
       }
     };
