@@ -53,7 +53,7 @@ export default function HomeComponent() {
         ]
       },
       primaryType: 'Message',
-      EIP712Domain: {
+      domain: {
         name: 'Anonymous Gripes',
         version: '1',
         chainId: parseInt(chainId, 16),
