@@ -10,11 +10,15 @@ export default function HomeComponent() {
   const handleGenerate = async () => {
     const message = 'By signing this message, you are creating a unique anonymous key for your account. This does not initiate a blockchain transaction or cost any gas fees.'
 
+    setLines([...lines, 'Attempting to switch to Base...']);
+
     // switch to Base if we're not already on it
     await frame.sdk.wallet.ethProvider.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: '0x2105' }] // Base mainnet chainId
     });
+
+    setLines([...lines, 'Switched to Base, getting accounts...']);
 
     const accounts = await frame.sdk.wallet.ethProvider.request({
       method: 'eth_requestAccounts'
@@ -22,7 +26,13 @@ export default function HomeComponent() {
 
     const walletAddress = accounts[0];
 
-    const chainId = await provider.request({ method: 'eth_chainId' });
+    setLines([...lines, 'Got wallet address: ' + walletAddress]);
+
+    setLines([...lines, 'Getting chainId...']);
+
+    const chainId = await frame.sdk.wallet.ethProvider.request({ method: 'eth_chainId' });
+
+    setLines([...lines, 'Got chainId: ' + parseInt(chainId, 16)]);
 
     const typedData = {
       types: {
@@ -54,6 +64,8 @@ export default function HomeComponent() {
       }
     };
 
+    setLines([...lines, 'Requesting message signature...']);
+
     try {
       const signature = await frame.sdk.wallet.ethProvider.request({
         method: 'eth_signTypedData_v4',
@@ -61,7 +73,7 @@ export default function HomeComponent() {
         from: walletAddress,
       })
 
-      setLines([...lines, signature]);
+      setLines([...lines, 'Signature: ' + signature]);
     } catch (error) {
       console.error('Error generating signature:', error);
       setLines([...lines, 'Error generating signature' + error.message]);
