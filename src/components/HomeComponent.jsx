@@ -54,7 +54,8 @@ export default function HomeComponent() {
           { name: 'verifyingContract', type: 'address' }
         ],
         Message: [
-          { name: 'content', type: 'string' },
+          { name: 'title', type: 'string' },
+          { name: 'description', type: 'string' },
           { name: 'userAddress', type: 'address' }
         ]
       },
@@ -66,7 +67,8 @@ export default function HomeComponent() {
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
       message: {
-        message: message,
+        title: 'Generate zero-knowledge proof',
+        description: message,
         userAddress: walletAddress
       }
     };
