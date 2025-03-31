@@ -1,16 +1,27 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "../app/page.module.css";
 import * as frame from '@farcaster/frame-sdk';
 
 export default function HomeComponent() {
   const [lines, setLines] = useState([]);
+  const linesRef = useRef([]);
+
+  useEffect(() => {
+    linesRef.current = lines;
+  }, [lines]);
+
+  const addLine = (line) => {
+    const newLines = [...linesRef.current, line];
+    linesRef.current = newLines;
+    setLines(newLines);
+  };
 
   const handleGenerate = async () => {
     const message = 'By signing this message, you are creating a unique anonymous key for your account. This does not initiate a blockchain transaction or cost any gas fees.'
 
-    setLines([...lines, 'Attempting to switch to Base...']);
+    addLine('Attempting to switch to Base...');
 
     // switch to Base if we're not already on it
     await frame.sdk.wallet.ethProvider.request({
@@ -18,7 +29,7 @@ export default function HomeComponent() {
       params: [{ chainId: '0x2105' }] // Base mainnet chainId
     });
 
-    setLines([...lines, 'Switched to Base, getting accounts...']);
+    addLine('Switched to Base, getting accounts...');
 
     const accounts = await frame.sdk.wallet.ethProvider.request({
       method: 'eth_requestAccounts'
@@ -26,13 +37,15 @@ export default function HomeComponent() {
 
     const walletAddress = accounts[0];
 
-    setLines([...lines, 'Got wallet address: ' + walletAddress]);
+    addLine('Got wallet address: ' + walletAddress);
 
-    setLines([...lines, 'Getting chainId...']);
+    addLine('Getting chainId...');
 
     const chainId = await frame.sdk.wallet.ethProvider.request({ method: 'eth_chainId' });
 
-    setLines([...lines, 'Got chainId: ' + parseInt(chainId, 16)]);
+    addLine('Got chainId: ' + parseInt(chainId, 16));
+
+    addLine('Generating typed data...');
 
     const typedData = {
       types: {
@@ -59,12 +72,12 @@ export default function HomeComponent() {
       message: {
         title: 'Generate zero-knowledge proof',
         description: message,
-        userAddress: userAddress,
+        userAddress: walletAddress,
         nonce: 1
       }
     };
 
-    setLines([...lines, 'Requesting message signature...']);
+    addLine('Requesting message signature...');
 
     try {
       const signature = await frame.sdk.wallet.ethProvider.request({
@@ -73,10 +86,10 @@ export default function HomeComponent() {
         from: walletAddress,
       })
 
-      setLines([...lines, 'Signature: ' + signature]);
+      addLine('Signature: ' + signature);
     } catch (error) {
       console.error('Error generating signature:', error);
-      setLines([...lines, 'Error generating signature' + error.message]);
+      addLine('Error generating signature: ' + error.message);
     }
   };
 
