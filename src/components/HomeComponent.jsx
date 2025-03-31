@@ -53,19 +53,19 @@ export default function HomeComponent() {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' }
         ],
-        Message: [
+        AuthRequest: [
           { name: 'message', type: 'string' },
           { name: 'userAddress', type: 'address' }
         ]
       },
-      primaryType: 'Message',
+      primaryType: 'AuthRequest',
       domain: {
         name: 'Anonymous Gripes',
         version: '1',
         chainId: parseInt(chainId, 16),
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
-      Message: {
+      AuthRequest: {
         message: message,
         userAddress: walletAddress
       }
