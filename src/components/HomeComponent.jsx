@@ -66,7 +66,6 @@ export default function HomeComponent() {
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
       message: {
-        // message: message,
         content: message,
         userAddress: walletAddress
       }
