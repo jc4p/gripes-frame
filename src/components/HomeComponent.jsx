@@ -65,7 +65,7 @@ export default function HomeComponent() {
         chainId: parseInt(chainId, 16),
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
-      message: {
+      Message: {
         content: message,
         userAddress: walletAddress
       }
