@@ -16,9 +16,39 @@ export default function HomeComponent() {
 
     const walletAddress = accounts[0];
 
+    const chainId = await provider.request({ method: 'eth_chainId' });
+
+    const typedData = {
+      types: {
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'version', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+          { name: 'verifyingContract', type: 'address' }
+        ],
+        DeterministicKey: [
+          { name: 'userAddress', type: 'address' },
+          { name: 'appId', type: 'string' },
+          { name: 'nonce', type: 'uint256' }
+        ]
+      },
+      primaryType: 'DeterministicKey',
+      domain: {
+        name: 'Anonymous Gripes',
+        version: '1',
+        chainId: parseInt(chainId, 16),
+        verifyingContract: '0x0000000000000000000000000000000000000000'
+      },
+      message: {
+        userAddress: userAddress,
+        appId: 'anonymous-gripes',
+        nonce: 1
+      }
+    };
+
     const signature = await frame.sdk.wallet.ethProvider.request({
       method: 'eth_signTypedData_v4',
-      params: [walletAddress, message],
+      params: [walletAddress, JSON.stringify(typedData)],
       from: walletAddress,
     })
 

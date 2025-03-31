@@ -14,6 +14,12 @@ export async function initializeFrame() {
 
   window.userFid = user.fid;
 
+  // switch to Base if we're not already on it
+  await frame.sdk.wallet.ethProvider.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: '0x2105' }] // Base mainnet chainId
+  });
+
   // Call the ready function to remove your splash screen when in a frame
   await frame.sdk.actions.ready();
 } 
