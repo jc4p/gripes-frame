@@ -54,7 +54,7 @@ export default function HomeComponent() {
           { name: 'verifyingContract', type: 'address' }
         ],
         Message: [
-          { name: 'content', type: 'string' },
+          { name: 'message', type: 'string' },
           { name: 'userAddress', type: 'address' }
         ]
       },
@@ -66,7 +66,7 @@ export default function HomeComponent() {
         verifyingContract: '0x0000000000000000000000000000000000000000'
       },
       message: {
-        content: message,
+        message: message,
         userAddress: walletAddress
       }
     };
