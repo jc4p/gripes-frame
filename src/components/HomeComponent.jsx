@@ -21,8 +21,6 @@ export default function HomeComponent() {
   const handleGenerate = async () => {
     const message = 'By signing this message, you are creating a unique anonymous key for your account.'
 
-    addLine('Attempting to switch to Base...');
-
     // switch to Base if we're not already on it
     await frame.sdk.wallet.ethProvider.request({
       method: 'wallet_switchEthereumChain',
@@ -39,11 +37,7 @@ export default function HomeComponent() {
 
     addLine('Got wallet address: ' + walletAddress);
 
-    addLine('Getting chainId...');
-
     const chainId = await frame.sdk.wallet.ethProvider.request({ method: 'eth_chainId' });
-
-    addLine('Got chainId: ' + parseInt(chainId, 16));
 
     const typedData = {
       types: {
