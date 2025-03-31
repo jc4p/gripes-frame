@@ -46,13 +46,18 @@ export default function HomeComponent() {
       }
     };
 
-    const signature = await frame.sdk.wallet.ethProvider.request({
-      method: 'eth_signTypedData_v4',
-      params: [walletAddress, JSON.stringify(typedData)],
-      from: walletAddress,
-    })
+    try {
+      const signature = await frame.sdk.wallet.ethProvider.request({
+        method: 'eth_signTypedData_v4',
+        params: [walletAddress, JSON.stringify(typedData)],
+        from: walletAddress,
+      })
 
-    setLines([...lines, signature]);
+      setLines([...lines, signature]);
+    } catch (error) {
+      console.error('Error generating signature:', error);
+      setLines([...lines, 'Error generating signature' + error.message]);
+    }
   };
 
   return (
